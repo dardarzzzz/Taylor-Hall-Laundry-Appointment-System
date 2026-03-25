@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Taylor Hall Laundry System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script>
+        emailjs.init("0onfjDexOAZW5TUlp");
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Taylor Hall Laundry System</h1>
+            <p>Book your laundry time slots with ease</p>
+        </div>
+
+        <div class="content">
+            <!-- User Dashboard -->
+            <div id="userDashboard" class="dashboard">
+                <div class="user-info">
+                    <div>
+                        <h2 id="userName"></h2>
+                        <p>Student ID: <strong id="userStudentId"></strong></p>
+                    </div>
+                    <button class="btn btn-secondary" style="width: auto; padding: 10px 30px;" onclick="logout()">Logout</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('schedule')">Available Machines</button>
+                    <button class="tab" onclick="showTab('mybookings')">My Bookings</button>
+                </div>
+
+                <div id="scheduleTab">
+                    <h2>Select a Time Slot</h2>
+                    <div id="scheduleGrid" class="schedule-grid"></div>
+                </div>
+
+                <div id="mybookingsTab" class="hidden">
+                    <h2>My Bookings</h2>
+                    <div id="myBookingsList"></div>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="adminDashboard" class="dashboard">
+                <div class="user-info">
+                    <div>
+                        <h2>Admin Dashboard</h2>
+                        <p>Manage all bookings and schedules</p>
+                    </div>
+                    <button class="btn btn-secondary" style="width: auto; padding: 10px 30px;" onclick="logout()">Logout</button>
+                </div>
+
+                <!-- Admin Tabs -->
+                <div class="admin-tabs">
+                    <!--button class="admin-tab active" onclick="showAdminTab('bookings')">All Bookings</button>
+                    <button class="admin-tab" onclick="showAdminTab('machines')">Manage Machines</button--->
+                </div>
+
+                <!-- Bookings Tab -->
+                <div id="adminBookingsTab" class="admin-content active">
+                    <h2>All Bookings</h2>
+
+                     <!-- CSV DOWNLOAD BUTTON -->
+                    <div style="margin-bottom: 20px;">
+                        <button class="btn btn-primary" onclick="exportCSV()">Download CSV</button>
+                    </div>
+                    
+                    <div id="adminBookingsContainer">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Student ID</th>
+                                    <th>Machine</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminBookingsTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Machines Management Tab -->
+                <div id="adminMachinesTab" class="admin-content">
+                    <div class="machine-management">
+                        <h2>Manage Laundry Machines</h2>
+                        
+                        <!-- Add Machine Form -->
+                        <div class="add-machine-form">
+                            <h3>Add New Machine</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="newMachineType">Machine Type</label>
+                                    <select id="newMachineType" class="form-control">
+                                        <option value="washer">Washer</option>
+                                        <option value="dryer">Dryer</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newMachineNumber">Machine Number</label>
+                                    <input type="number" id="newMachineNumber" class="form-control" 
+                                           min="1" value="1" placeholder="Enter number">
+                                </div>
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button class="btn btn-primary" onclick="addNewMachine()">
+                                        Add Machine
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Current Machines List -->
+                        <h3 style="margin-top: 30px;">Current Machines</h3>
+                        <div class="machine-list" id="machinesList">
+                            <!-- Machines will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Booking</h2>
+            <p><strong>Machine:</strong> <span id="modalMachine"></span></p>
+            <p><strong>Date:</strong> <span id="modalDate"></span></p>
+            <p><strong>Time:</strong> <span id="modalTime"></span></p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="confirmBooking()">Confirm</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div id="rescheduleModal" class="modal">
+        <div class="modal-content">
+            <h2>Reschedule Booking</h2>
+            <div class="form-group">
+                <label for="rescheduleMachine">Select Machine</label>
+                <select id="rescheduleMachine"></select>
+            </div>
+            <div class="form-group">
+                <label for="rescheduleDate">Select Date</label>
+                <input type="date" id="rescheduleDate">
+            </div>
+            <div class="form-group">
+                <label for="rescheduleTime">Select Time</label>
+                <select id="rescheduleTime"></select>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-success" style="flex: 1;" onclick="confirmReschedule()">Reschedule</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeRescheduleModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Machine Modal -->
+    <div id="deleteMachineModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete <strong id="deleteMachineName"></strong>?</p>
+            <p class="warning-text">Warning: This will also delete all existing bookings for this machine!</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-danger" style="flex: 1;" onclick="confirmDeleteMachine()">Delete</button>
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
