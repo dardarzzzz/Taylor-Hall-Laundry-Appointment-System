@@ -1,2 +1,3 @@
-# Taylor-Hall-Laundry-Appointment-System
 Taylor Hall’s laundry system lacks an organized booking process, resulting in overcrowding, long waits, conflicts over machine use and inefficient scheduling. These challenges negatively affect the overall student experience and reduce the effective utilization of laundry resources.
+
+ A digital appointment and ID verification system is needed to streamline scheduling and improve the student experience. The system will allow students to reserve time slots for laundry machine use, verify their identity using their student ID and receive real-time updates regarding machine availability. By introducing an organized booking framework, the system aims to improve fairness, reduce conflicts, optimize machine usage and enhance convenience.
