@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Taylor Hall Laundry System</title>
     <link rel="stylesheet" href="styles.css">
+
+    <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>emailjs.init("0onfjDexOAZW5TUlp");</script>
 
-    <script>
-        emailjs.init("0onfjDexOAZW5TUlp");
-    </script>
-
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="container">
@@ -56,21 +57,14 @@
                     <button class="btn btn-secondary" style="width: auto; padding: 10px 30px;" onclick="logout()">Logout</button>
                 </div>
 
-                <!-- Admin Tabs -->
-                <div class="admin-tabs">
-                    <!--button class="admin-tab active" onclick="showAdminTab('bookings')">All Bookings</button>
-                    <button class="admin-tab" onclick="showAdminTab('machines')">Manage Machines</button--->
-                </div>
+                <div class="admin-tabs"></div>
 
                 <!-- Bookings Tab -->
                 <div id="adminBookingsTab" class="admin-content active">
                     <h2>All Bookings</h2>
-
-                     <!-- CSV DOWNLOAD BUTTON -->
                     <div style="margin-bottom: 20px;">
                         <button class="btn btn-primary" onclick="exportCSV()">Download CSV</button>
                     </div>
-                    
                     <div id="adminBookingsContainer">
                         <table class="admin-table">
                             <thead>
@@ -93,8 +87,6 @@
                 <div id="adminMachinesTab" class="admin-content">
                     <div class="machine-management">
                         <h2>Manage Laundry Machines</h2>
-                        
-                        <!-- Add Machine Form -->
                         <div class="add-machine-form">
                             <h3>Add New Machine</h3>
                             <div class="form-row">
@@ -107,23 +99,16 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="newMachineNumber">Machine Number</label>
-                                    <input type="number" id="newMachineNumber" class="form-control" 
-                                           min="1" value="1" placeholder="Enter number">
+                                    <input type="number" id="newMachineNumber" class="form-control" min="1" value="1" placeholder="Enter number">
                                 </div>
                                 <div class="form-group">
                                     <label>&nbsp;</label>
-                                    <button class="btn btn-primary" onclick="addNewMachine()">
-                                        Add Machine
-                                    </button>
+                                    <button class="btn btn-primary" onclick="addNewMachine()">Add Machine</button>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Current Machines List -->
                         <h3 style="margin-top: 30px;">Current Machines</h3>
-                        <div class="machine-list" id="machinesList">
-                            <!-- Machines will be populated here -->
-                        </div>
+                        <div class="machine-list" id="machinesList"></div>
                     </div>
                 </div>
             </div>
