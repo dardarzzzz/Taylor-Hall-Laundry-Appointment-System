@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taylor Hall Laundry System</title>
     <link rel="stylesheet" href="styles.css">
-    
+
+    <!-- Supabase loads first so it's ready when app.js initializes it -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- app.js loads synchronously so all functions exist before the page renders -->
     <script src="app.js"></script>
 </head>
 <body>
@@ -27,8 +30,8 @@
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" placeholder="Enter your password">
                 </div>
-                <button class="btn btn-primary" onclick="login()">Login</button>
-                <div class="link-btn" onclick="showSignup()">Don't have an account? Sign Up</div>
+                <button class="btn btn-primary" id="loginBtn">Login</button>
+                <div class="link-btn" id="showSignupBtn">Don't have an account? Sign Up</div>
             </div>
 
             <!-- Signup Form -->
@@ -50,11 +53,26 @@
                     <label for="signupPassword">Password</label>
                     <input type="password" id="signupPassword" placeholder="Create a password">
                 </div>
-                <button class="btn btn-primary" onclick="signup()">Sign Up</button>
-                <div class="link-btn" onclick="showLogin()">Already have an account? Login</div>
+                <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+                <div class="link-btn" id="showLoginBtn">Already have an account? Login</div>
             </div>
         </div>
     </div>
-    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('loginBtn').addEventListener('click', login);
+            document.getElementById('signupBtn').addEventListener('click', signup);
+            document.getElementById('showSignupBtn').addEventListener('click', showSignup);
+            document.getElementById('showLoginBtn').addEventListener('click', showLogin);
+
+            document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') login();
+            });
+            document.getElementById('signupPassword').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') signup();
+            });
+        });
+    </script>
 </body>
 </html>
