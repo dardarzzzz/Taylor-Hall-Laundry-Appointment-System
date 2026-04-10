@@ -1,5 +1,5 @@
 /* =========================================================
-   GLOBAL RESET & VARIABLES
+   GLOBAL RESET & VARIABLES 
 ========================================================= */
 * {
     margin: 0;
@@ -66,7 +66,7 @@ body {
 }
 
 /* =========================================================
-   CONTAINER + HEADER
+   CONTAINER + HEADER REDONE 
 ========================================================= */
 .container {
     background: var(--bg-card);
@@ -123,7 +123,7 @@ body {
 }
 
 /* =========================================================
-   AUTH STYLING
+   AUTH STYLING Redone
 ========================================================= */
 .auth-layout {
     display: grid;
@@ -443,7 +443,7 @@ input:focus, select:focus {
 
 
 /* =========================================================
-   MACHINE SCHEDULE GRID
+   MACHINE SCHEDULE GRID Redone
 ========================================================= */
 .schedule-grid {
     display: grid;
@@ -476,7 +476,7 @@ input:focus, select:focus {
 }
 
 /* =========================================================
-   TIME SLOTS
+   TIME SLOTS REVAMPED
 ========================================================= */
 .time-slot {
     padding: 11px 14px;
@@ -527,7 +527,7 @@ input:focus, select:focus {
 }
 
 /* =========================================================
-   MY BOOKINGS
+   MY BOOKINGS REVAMPED
 ========================================================= */
 .my-bookings {
     margin-top: 24px;
@@ -638,7 +638,7 @@ input:focus, select:focus {
 }
 
 /* =========================================================
-   ADMIN TABLE
+   ADMIN TABLE REVAMPED
 ========================================================= */
 .admin-table {
     width: 100%;
