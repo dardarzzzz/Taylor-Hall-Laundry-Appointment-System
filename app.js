@@ -148,10 +148,13 @@ class AuthService {
     }
 
     async login(emailOrId, password) {
+        // Check if login fields are filled
         if (!emailOrId || !password) throw new Error('Please enter your email/ID and password.');
 
         let email = emailOrId;
+        // If input is a student ID, look up the corresponding email
         if (!emailOrId.includes('@')) {
+            // Authenticate user with email and password
             const { data: row } = await this._db.from('users').select('email')
                 .eq('student_id', emailOrId).single();
             if (!row) throw new Error('No account found with that Student ID.');
@@ -160,11 +163,11 @@ class AuthService {
 
         const { data, error } = await this._db.auth.signInWithPassword({ email, password });
         if (error) throw new Error('Invalid credentials! Please check your email/ID and password.');
-
+            // Fetch full user profile from databas
         const { data: profile } = await this._db.from('users').select('*')
             .eq('id', data.user.id).single();
         if (!profile) throw new Error('Account profile not found.');
-
+        // Create User object from profile data
         const user = new User({
             id:        profile.id,
             name:      profile.name,
@@ -172,10 +175,11 @@ class AuthService {
             studentId: profile.student_id,
             role:      profile.role
         });
+        // Save user session locally
         this._saveSession(user);
         return user;
     }
-
+    // Register a new user
     async signup({ name, email, studentId, password }) {
         if (!name || !email || !studentId || !password)
             throw new Error('Please fill in all fields!');
@@ -183,16 +187,16 @@ class AuthService {
         const { data: existing } = await this._db.from('users').select('id')
             .or(`email.eq.${email},student_id.eq.${studentId}`).maybeSingle();
         if (existing) throw new Error('An account with that email or Student ID already exists.');
-
+          // Create authentication account
         const { data, error } = await this._db.auth.signUp({ email, password });
         if (error) throw new Error(error.message);
-
+        // Insert user profile into database
         const { error: profileError } = await this._db.from('users').insert({
             id: data.user.id, name, email, student_id: studentId, role: 'user'
         });
         if (profileError) throw new Error('Error creating profile: ' + profileError.message);
     }
-
+    // Log out user and clear session
     async logout() {
         await this._db.auth.signOut();
         sessionStorage.removeItem('currentUser');
